@@ -1,0 +1,41 @@
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - goconst
+    - goimports
+    - gosec
+    - govet
+    - ineffassign
+    - revive
+    - typecheck
+    - unused
+linters-settings:
+  gocyclo:
+    min-complexity: 10 # Минимальная сложность для выявления цикломатической сложности
+  misspell:
+    locale: US 
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 50
+  max-same-issues: 50
+
+output:
+  formats:
+    - format: colored-line-number
+  print-issued-lines: false
+  print-linter-name: false
+
+run:
+  timeout: 5m
+  relative-path-mode: gomod
+  issues-exit-code: 2
+  
+  tests: false
+  build-tags:
+    - mytag
+  modules-download-mode: readonly
+  allow-parallel-runners: true
+  allow-serial-runners: true
+  go: '1.22.4'
+  concurrency: 4
