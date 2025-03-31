@@ -20,7 +20,6 @@ func New(connString string) (*Storage, error) {
 	return &Storage{db: conn}, nil
 }
 func (s *Storage) Create(ctx context.Context, usernames []string) (int64, error) {
-	// твоя логика
 	return 1, nil
 }
 

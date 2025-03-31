@@ -11,3 +11,11 @@ services:
       - "54321:5432"
     volumes:
       - postgres_volume_local:/var/lib/postgresql/data
+
+  migrator-local:
+    build:
+      context: .
+      dockerfile: migration_local.Dockerfile
+    restart: on-failure
+    environment:
+      DB_HOST: pg-local
