@@ -9,9 +9,9 @@ import (
 )
 
 type Chat interface {
-	CreateRequest(ctx context.Context, usernames []string) (int64, error)
-	DeleteRequest(ctx context.Context, id int64) (*emptypb.Empty, error)
-	SendMessageRequest(ctx context.Context, from string, text string) (*emptypb.Empty, error)
+	Create(ctx context.Context, usernames []string) (int64, error)
+	Delete(ctx context.Context, id int64) (*emptypb.Empty, error)
+	SendMessage(ctx context.Context, from string, text string) (*emptypb.Empty, error)
 }
 type serverApi struct {
 	chat_v1.UnimplementedChatV1Server
@@ -22,12 +22,12 @@ func Register(server *grpc.Server, chat Chat) {
 	chat_v1.RegisterChatV1Server(server, &serverApi{chat: chat})
 }
 
-func (s *serverApi) CreateRequest(ctx context.Context, usernames []string) (int64, error) {
-	return 0, nil
+func (s *serverApi) Create(ctx context.Context, req *chat_v1.CreateRequest) (*chat_v1.CreateResponse, error) {
+	return &chat_v1.CreateResponse{Id: 1}, nil
 }
-func (s *serverApi) DeleteRequest(ctx context.Context, id int64) (*emptypb.Empty, error) {
+func (s *serverApi) Delete(ctx context.Context, req *chat_v1.DeleteRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
 }
-func (s *serverApi) SendMessageRequest(ctx context.Context, from string, text string) (*emptypb.Empty, error) {
+func (s *serverApi) SendMessage(ctx context.Context, req *chat_v1.SendMessageRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
 }

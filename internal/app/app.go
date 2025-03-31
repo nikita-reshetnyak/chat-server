@@ -1,28 +1,23 @@
 package app
 
 import (
-	"context"
+	"log"
 
 	grpcapp "github.com/nikita-reshetnyak/chat-server/internal/app/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
+	chatserver "github.com/nikita-reshetnyak/chat-server/internal/services/chat-server"
+	"github.com/nikita-reshetnyak/chat-server/internal/storage/postgres"
 )
 
 type App struct {
 	GrpcServer *grpcapp.App
 }
-type chat struct{}
-
-func (s *chat) CreateRequest(ctx context.Context, usernames []string) (int64, error) {
-	return 0, nil
-}
-func (s *chat) DeleteRequest(ctx context.Context, id int64) (*emptypb.Empty, error) {
-	return &emptypb.Empty{}, nil
-}
-func (s *chat) SendMessageRequest(ctx context.Context, from string, text string) (*emptypb.Empty, error) {
-	return &emptypb.Empty{}, nil
-}
 
 func New(grpcPort string, configPath string) *App {
-	app := grpcapp.New(&chat{}, grpcPort)
+	conn, err := postgres.New(configPath)
+	if err != nil {
+		log.Fatalf("failed to connect to postgres:%v", err)
+	}
+	chatService := chatserver.New(conn)
+	app := grpcapp.New(chatService, grpcPort)
 	return &App{GrpcServer: app}
 }
