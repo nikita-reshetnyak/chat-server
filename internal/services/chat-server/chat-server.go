@@ -9,8 +9,8 @@ import (
 
 type Repository interface {
 	Create(ctx context.Context, usernames []string) (int64, error)
-	Delete(ctx context.Context, id int64) error
-	SendMessage(ctx context.Context, from string, text string) error
+	Delete(ctx context.Context, id int64) (*emptypb.Empty, error)
+	SendMessage(ctx context.Context, from string, text string) (*emptypb.Empty, error)
 }
 type ChatServer struct {
 	repo Repository
@@ -27,7 +27,11 @@ func (s *ChatServer) Create(ctx context.Context, usernames []string) (int64, err
 	return chatID, nil
 }
 func (s *ChatServer) Delete(ctx context.Context, id int64) (*emptypb.Empty, error) {
-	return &emptypb.Empty{}, nil
+	empty, err := s.repo.Delete(ctx, id)
+	if err != nil {
+		return empty, fmt.Errorf("%w", err)
+	}
+	return empty, nil
 }
 func (s *ChatServer) SendMessage(ctx context.Context, from string, text string) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil

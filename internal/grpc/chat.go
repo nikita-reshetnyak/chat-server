@@ -31,6 +31,10 @@ func (s *serverApi) Create(ctx context.Context, req *chat_v1.CreateRequest) (*ch
 	return &chat_v1.CreateResponse{Id: chatID}, nil
 }
 func (s *serverApi) Delete(ctx context.Context, req *chat_v1.DeleteRequest) (*emptypb.Empty, error) {
+	_, err := s.chat.Delete(ctx, req.Id)
+	if err != nil {
+		return &emptypb.Empty{}, fmt.Errorf("%w", err)
+	}
 	return &emptypb.Empty{}, nil
 }
 func (s *serverApi) SendMessage(ctx context.Context, req *chat_v1.SendMessageRequest) (*emptypb.Empty, error) {

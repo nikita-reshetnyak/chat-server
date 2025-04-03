@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type Storage struct {
@@ -62,12 +63,17 @@ func (s *Storage) Create(ctx context.Context, usernames []string) (int64, error)
 	return chatId, nil
 }
 
-func (s *Storage) Delete(ctx context.Context, id int64) error {
-	// твоя логика
-	return nil
+func (s *Storage) Delete(ctx context.Context, id int64) (*emptypb.Empty, error) {
+	_, err := s.db.Exec(ctx, "DELETE FROM chats WHERE id = $1", id)
+	if err != nil {
+		return &emptypb.Empty{}, fmt.Errorf("failed to delete chat id: %d: %w", id, err)
+	}
+	fmt.Printf("deleted chat id:%d", id)
+
+	return &emptypb.Empty{}, nil
 }
 
-func (s *Storage) SendMessage(ctx context.Context, from string, text string) error {
+func (s *Storage) SendMessage(ctx context.Context, from string, text string) (*emptypb.Empty, error) {
 	// твоя логика
-	return nil
+	return &emptypb.Empty{}, nil
 }
