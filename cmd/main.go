@@ -4,6 +4,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 
 	"github.com/nikita-reshetnyak/chat-server/internal/app"
@@ -17,11 +18,20 @@ func init() {
 }
 func main() {
 	flag.Parse()
+	err := config.Load(configPath)
+	if err != nil {
+		log.Fatalf("failed to load config: %v", err)
+	}
 	grpcConfig, err := config.NewGrpcConfig()
 	if err != nil {
 		log.Fatalf("%v", err.Error())
 	}
-	application := app.New(grpcConfig.Address(), configPath)
+	pgConfig, err := config.NewPgConfig()
+	if err != nil {
+		log.Fatalf("%v", err.Error())
+	}
+	application := app.New(grpcConfig.Address(), pgConfig.DSN())
+	fmt.Printf("server is runngin at:%s", grpcConfig.Address())
 	err = application.GrpcServer.Run()
 	if err != nil {
 		log.Fatalf("failed to run grpc server")

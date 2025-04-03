@@ -2,6 +2,7 @@ package chatserver
 
 import (
 	"context"
+	"fmt"
 
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -19,7 +20,11 @@ func New(repo Repository) *ChatServer {
 	return &ChatServer{repo: repo}
 }
 func (s *ChatServer) Create(ctx context.Context, usernames []string) (int64, error) {
-	return 0, nil
+	chatID, err := s.repo.Create(ctx, usernames)
+	if err != nil {
+		return 0, fmt.Errorf("%w", err)
+	}
+	return chatID, nil
 }
 func (s *ChatServer) Delete(ctx context.Context, id int64) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil

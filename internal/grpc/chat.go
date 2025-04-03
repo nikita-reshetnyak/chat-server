@@ -2,6 +2,7 @@ package chatgrpc
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nikita-reshetnyak/chat-server/gen/chat_v1"
 	"google.golang.org/grpc"
@@ -23,7 +24,11 @@ func Register(server *grpc.Server, chat Chat) {
 }
 
 func (s *serverApi) Create(ctx context.Context, req *chat_v1.CreateRequest) (*chat_v1.CreateResponse, error) {
-	return &chat_v1.CreateResponse{Id: 1}, nil
+	chatID, err := s.chat.Create(ctx, req.Usernames)
+	if err != nil {
+		return nil, fmt.Errorf("%w", err)
+	}
+	return &chat_v1.CreateResponse{Id: chatID}, nil
 }
 func (s *serverApi) Delete(ctx context.Context, req *chat_v1.DeleteRequest) (*emptypb.Empty, error) {
 	return &emptypb.Empty{}, nil
