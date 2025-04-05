@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 54321,
+            "driver": "PostgreSQL",
+            "name": "LOCAL",
+            "database": "chat-server",
+            "username": "chat-server-user",
+            "password": "chat-server-password"
+        }
+    ]
+}
